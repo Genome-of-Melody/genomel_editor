@@ -1,3 +1,5 @@
+import csv
+
 from django.db import models
 
 # Create your models here.
@@ -38,7 +40,9 @@ class Chant(models.Model):
     def chant_from_csv_line(line, delimiter=','):
         """Parse a CSV line with the fields defined for Chant objects
         into a Chant object."""
-        fields = line.split(delimiter)
+        reader = csv.reader([line], delimiter=delimiter)
+        fields = reader.__next__()
+
         chant = Chant(
             id=fields[0],
             corpus_id=fields[2],
@@ -76,12 +80,13 @@ class Chant(models.Model):
         into a list of Chant objects."""
         chants = []
         for i, line_bytes in enumerate(csv_file.readlines()):
-            line_str = line_bytes.decode('utf-8')
+            line_str = line_bytes.decode('utf-8').strip()
             # Discard header row (checks for starting comma).
             if i == 0:
                 if line_str.startswith(','):
                     continue
             # print('Processing line {}: {}'.format(i, line_str))
+            # Here we need more intelligent CSV processing.
             chant = Chant.chant_from_csv_line(line_str, delimiter)
             chants.append(chant)
         return chants
@@ -114,7 +119,16 @@ class Source(models.Model):
     def source_from_csv_line(line, delimiter=','):
         """Parse a CSV line with the fields defined for Source objects
         into a Source object."""
-        fields = line.split(delimiter)
+        reader = csv.reader([line], delimiter=delimiter)
+        fields = reader.__next__()
+
+        n_cantus_chants = fields[16]
+        if n_cantus_chants == '':
+            n_cantus_chants = None
+        n_cantus_melodies = fields[17]
+        if n_cantus_melodies == '':
+            n_cantus_melodies = None
+
         source = Source(
             title=fields[0],
             siglum=fields[1],
@@ -132,8 +146,8 @@ class Source(models.Model):
             drupal_path=fields[13],
             cursus=fields[14],
             image_link=fields[15],
-            n_cantus_chants=fields[16],
-            n_cantus_melodies=fields[17]
+            n_cantus_chants=n_cantus_chants,
+            n_cantus_melodies=n_cantus_melodies
         )
         print('...created source: {}'.format(source))
         return source
@@ -144,10 +158,10 @@ class Source(models.Model):
         into a list of Source objects."""
         sources = []
         for i, line_bytes in enumerate(csv_file.readlines()):
-            line_str = line_bytes.decode('utf-8')
-            # Discard header row (checks for starting comma).
+            line_str = line_bytes.decode('utf-8').strip()
+            # Discard header row (checks for starting field "title").
             if i == 0:
-                if line_str.startswith(','):
+                if line_str.startswith('title'):
                     continue
             # print('Processing line {}: {}'.format(i, line_str))
             source = Source.source_from_csv_line(line_str, delimiter)
