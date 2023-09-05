@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block page %}
+
+    {% block dashboard %}
+        We have {{ n_chants }} chants and {{ n_melodies }} melodies.
+        <br> Our annotations are {{ percent_done }}% complete.
+    {% endblock %}
+
+    {% if user.is_superuser %}
+        <form action="{% url "GenomelEditor:upload_chants" %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="chants_csv" placeholder="Chants CSV">
+            <input type="submit" value="Upload">
+        </form>
+        <form action="{% url "GenomelEditor:upload_sources" %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="sources_csv" placeholder="Sources CSV">
+            <input type="submit" value="Upload">
+        </form>
+    {% endif %}
+
+{% endblock %}

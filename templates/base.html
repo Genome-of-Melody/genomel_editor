@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Genome of Melody Editor</title>
+</head>
+<body>
+
+    <div id="header">
+        {% block header %}
+            <h1>Genome of Melody Editor</h1>
+            {% if user.is_authenticated %}
+                <p>Hi {{ user.username }}!</p>
+                <a href="{% url 'GenomelEditor:logout' %}">Logout</a>
+            {% else %}
+                {% include "login.html" %}
+            {% endif %}
+        {% endblock %}
+    </div>
+
+    <div id="page">
+        {% block page %}
+        {% endblock %}
+    </div>
+
+</body>
+</html>
