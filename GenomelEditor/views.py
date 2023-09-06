@@ -24,10 +24,14 @@ def index(request):
 
 @login_required
 def annotate(request):
-    username = request.user.username
     # return render(request, 'index.html')
-    # TODO Return the melody annotation page.
-    return index(request)
+    return render(request, 'annotate.html')
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_dashboard(request):
+    # This shows the dashboard for an admin.
+    return render(request, 'admin_dashboard.html')
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -75,7 +79,8 @@ def login_user(request):
     if user is not None:
         # A backend authenticated the credentials
         login(request, user)
-        # TODO: redirect to the melody annotation page.
+        if user.is_superuser:
+            return admin_dashboard(request)
         return annotate(request)
     else:
         return index(request)

@@ -1,5 +1,11 @@
-{% extends base.html %}
+{% extends "base.html" %}
 {% block page %}
-    Hello {{ user.username }}!
-    <button onclick=""></button>
+    <div id="chant_description">
+        <button>Cantus ID, incipit, etc.</button>
+    </div>
+
+    <div id="image">Here be the image from which you are transcribing.</div>
+    <div id="result">Here be the result of the transcription.</div>
+    <div id="volpiano">Here be the volpiano input.</div>
+    <div id="syllabized_text">Here be the syllabized text (editable).</div>
 {% endblock %}

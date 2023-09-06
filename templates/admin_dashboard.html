@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block page %}
+    {% if user.is_superuser %}
+
+
+    <h1>Admin dashboard</h1>
+
+    <h2>Upload chants CSV</h2>
+    <form action="{% url "GenomelEditor:upload_chants" %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="chants_csv" placeholder="Chants CSV">
+        <input type="submit" value="Upload">
+    </form>
+    <h2>Upload sources CSV</h2>
+    <form action="{% url "GenomelEditor:upload_sources" %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="sources_csv" placeholder="Sources CSV">
+        <input type="submit" value="Upload">
+    </form>
+
+    {% else %}
+        <h1>Not authorized.</h1>
+    {% endif %}
+{% endblock %}
