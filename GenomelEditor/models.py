@@ -74,6 +74,10 @@ class Chant(models.Model):
         print('...created chant: {}'.format(chant))
         return chant
 
+    def __str__(self):
+        return 'Chant {} (Cantus ID: {}, source: {}, incipit: {})' \
+               ''.format(self.id, self.cantus_id, self.siglum, self.incipit)
+
     @staticmethod
     def chants_from_csv_file(csv_file, delimiter=','):
         """Parse a CSV file with the fields defined for Chant objects
@@ -175,6 +179,8 @@ class Source(models.Model):
 class Melody(models.Model):
     chant = models.ForeignKey(Chant, on_delete=models.CASCADE)
     volpiano = models.CharField(max_length=65025)
+    syllabized_text = models.CharField(max_length=65025, null=True, default=None)
+
     timestamp = models.DateTimeField(auto_now_add=True)
     # The user field is a foreign key to the User model of the Django.
     user = models.ForeignKey("auth.User", on_delete=models.PROTECT, default=None)
@@ -182,3 +188,11 @@ class Melody(models.Model):
     # Flag for notation that cannot be transcribed.
     is_adiastematic = models.BooleanField(default=False)
 
+    # Flag for melody transcription state: in transcription, checked, submitted.
+    is_in_transcription = models.BooleanField(default=False)
+    is_in_checks = models.BooleanField(default=False)
+    is_submitted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return 'Melody of chant {}: volpiano={}, syllabized_text={}' \
+                ''.format(self.chant.id, self.volpiano, self.syllabized_text)

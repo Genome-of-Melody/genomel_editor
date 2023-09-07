@@ -1,0 +1,41 @@
+<div id="volpiano_transcription">
+    <div id="volpiano_transcription_result">
+{#        Here be the result of the transcription. The purpose of this field#}
+{#        is to provide feedback: how does the current transcription look like?#}
+    </div>
+    <div id="volpiano_transcription_input">
+{#        Here be the input field where the user edits the volpiano string.#}
+        {# The important part is the form, which triggers updates to the Melody #}
+        {# object in the database. #}
+        <form action="{% url 'GenomelEditor:save_annotation' %}" method="post">
+
+            <label for="volpiano_transcription_volpiano_input">Volpiano</label>
+            <input id="volpiano_transcription_volpiano_input"
+                   type="text"
+                   name="volpiano"
+                   size="{{ melody.volpiano|length|add:"120" }}"
+                   value="{{ melody.volpiano }}">
+            <br>
+            <label for="volpiano_transcription_syllabized_text_input">Syllabized text</label>
+            <input id="volpiano_transcription_syllabized_text_input"
+                   type="text"
+                   name="syllabized_text"
+                   size="{{ melody.syllabized_text|length|add:"40" }}"
+                   value="{{ melody.syllabized_text }}">
+            <br>
+            <label for="volpiano_transcription_is_adiastematic">Is adiastematic?</label>
+            <input id="volpiano_transcription_is_adiastematic"
+                   type="checkbox"
+                   name="is_adiastematic"
+                   value="{{ melody.is_adiastematic }}">
+            <br>
+
+            <input type="hidden" value="{{ melody.id }}" name="melody_id">
+            <input type="hidden" value="{{ chant.id }}" name="chant_id">
+
+            <input type="submit" value="Save">
+        </form>
+{#        Editable field for syllabized text.#}
+{#        Pre-populated with the chant.full_text_manuscript field.#}
+    </div>
+</div>
