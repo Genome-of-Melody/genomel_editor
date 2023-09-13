@@ -1,10 +1,15 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block page %}
+
 
     {% include "chant_description.html" with chant=chant %}
 
     <br>
-    <div id="image">(Here will be the image from which you are transcribing.)</div>
+    <div id="image">(Here will be the image from which you are transcribing.)
+        <img src="{% static 'test_folio_pl_21r.jpg' %}" alt="test image"/>
+    </div>
     <br>
     {# Have to pass both melody and chant to the transcription because of the form #}
     {# action having to send the data upstream to really create a new melody. #}

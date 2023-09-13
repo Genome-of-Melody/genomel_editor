@@ -7,7 +7,7 @@ from django.db import models
 
 class Chant(models.Model):
     """The first model is a Chant model. It will have the following fields derived
-    from the /static/introits_20cids_chants.csv file:
+    from the /data/introits_20cids_chants.csv file:
     ,id,corpus_id,incipit,cantus_id,mode,finalis,differentia,siglum,position,folio,sequence,marginalia,cao_concordances,feast_id,genre_id,office_id,source_id,melody_id,drupal_path,full_text,full_text_manuscript,volpiano,notes,dataset_name,dataset_idx,image_link
     """
     id = models.IntegerField(primary_key=True)
@@ -99,7 +99,7 @@ class Chant(models.Model):
 
 class Source(models.Model):
     """The second model is a Source model. It will have the following fields derived
-    from the /static/introits_20cids_sources.csv file:
+    from the /data/introits_20cids_sources.csv file:
     title,siglum,description,rism,date,century,provenance,provenance_detail,segment,summary,indexing_notes,liturgical_occasions,indexing_date,drupal_path,cursus,image_link,n_cantus_chants,n_cantus_melodies"""
     title = models.CharField(max_length=255, null=True, default=None)
     siglum = models.CharField(max_length=255, null=True, default=None)
