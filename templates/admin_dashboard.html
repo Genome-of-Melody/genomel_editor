@@ -12,6 +12,7 @@
         <input type="file" name="chants_csv" placeholder="Chants CSV">
         <input type="submit" value="Upload">
     </form>
+
     <h2>Upload sources CSV</h2>
     <form action="{% url "GenomelEditor:upload_sources" %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}

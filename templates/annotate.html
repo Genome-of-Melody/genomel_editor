@@ -6,9 +6,6 @@
     <br>
     <div id="image">(Here will be the image from which you are transcribing.)</div>
     <br>
-{#    <div id="result">Here be the result of the transcription.</div>#}
-{#    <div id="volpiano">Here be the volpiano input.</div>#}
-{#    <div id="syllabized_text">Here be the syllabized text (editable).</div>#}
     {# Have to pass both melody and chant to the transcription because of the form #}
     {# action having to send the data upstream to really create a new melody. #}
     {% include "volpiano_transcription.html" with melody=melody chant=chant %}

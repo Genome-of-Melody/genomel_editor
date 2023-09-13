@@ -1,4 +1,5 @@
 import csv
+import logging
 
 from django.db import models
 
@@ -113,6 +114,7 @@ class Source(models.Model):
     indexing_notes = models.CharField(max_length=65025, null=True, default=None)
     liturgical_occasions = models.CharField(max_length=65025, null=True, default=None)
     indexing_date = models.CharField(max_length=255, null=True, default=None)
+    # The URL path to the source page from which its data was scraped acts as the primary key.
     drupal_path = models.CharField(max_length=255, primary_key=True)
     cursus = models.CharField(max_length=255, null=True, default=None)
     image_link = models.CharField(max_length=511, null=True, default=None)
@@ -177,22 +179,68 @@ class Source(models.Model):
 # outputs: melodies of chants from the Chant model. We will call this model
 # Melody. It will have the following fields:
 class Melody(models.Model):
+    id = models.IntegerField(primary_key=True)
     chant = models.ForeignKey(Chant, on_delete=models.CASCADE)
     volpiano = models.CharField(max_length=65025)
     syllabized_text = models.CharField(max_length=65025, null=True, default=None)
 
     timestamp = models.DateTimeField(auto_now_add=True)
-    # The user field is a foreign key to the User model of the Django.
-    user = models.ForeignKey("auth.User", on_delete=models.PROTECT, default=None)
 
-    # Flag for notation that cannot be transcribed.
+    # The user fields are foreign keys to the User model of the Django.
+    user_transcriber = models.ForeignKey("auth.User", on_delete=models.PROTECT, default=None,
+                                         related_name='transcriber')
+    user_checker = models.ForeignKey("auth.User", on_delete=models.PROTECT, default=None,
+                                     related_name='checker', null=True)
+
+    # Flag for data that cannot be transcribed.
     is_adiastematic = models.BooleanField(default=False)
+    is_incomplete_in_source = models.BooleanField(default=False)
 
-    # Flag for melody transcription state: in transcription, checked, submitted.
+    # Flag for melody transcription state: in transcription, in checking, finalized.
+    # Each of these states is at the same time a queue for actions of users (with the appropriate permissions).
     is_in_transcription = models.BooleanField(default=False)
     is_in_checks = models.BooleanField(default=False)
-    is_submitted = models.BooleanField(default=False)
+    is_finalized = models.BooleanField(default=False)
 
     def __str__(self):
-        return 'Melody of chant {}: volpiano={}, syllabized_text={}' \
-                ''.format(self.chant.id, self.volpiano, self.syllabized_text)
+        return 'Melody id={} of chant {}: volpiano={}, transcriber={}, checker={}, syllabized_text={}' \
+                ''.format(self.id,
+                          self.chant.id,
+                          self.volpiano,
+                          self.user_transcriber,
+                          self.user_checker,
+                          self.syllabized_text)
+
+    def should_be_transcribed(self):
+        return (not self.is_adiastematic) and (not self.is_incomplete_in_source)
+
+    def move_to_checks(self):
+        """State change: from transcription or finalization to checks."""
+        self.is_in_transcription = False
+        self.is_in_checks = True
+        self.is_finalized = False
+
+    def move_to_finalized(self):
+        """State change: from checks to finalized.
+        If the melody was not checked or finalized already, raises a ValueError."""
+        if (not self.is_in_checks) or (not self.is_finalized):
+            raise ValueError('Melody must go through checks before it can be finalized!')
+        self.is_in_transcription = False
+        self.is_in_checks = False
+        self.is_finalized = True
+
+    def move_to_transcription(self):
+        if not self.should_be_transcribed():
+            logging.warning('Melody being moved to transcription queue which should NOT be transcribed: {}'
+                            ''.format(self))
+        self.is_in_transcription = True
+        self.is_in_checks = False
+        self.is_finalized = False
+
+    @property
+    def show_as_transcribed(self):
+        return self.is_in_checks or self.is_finalized
+
+    @property
+    def show_as_checked(self):
+        return self.is_finalized

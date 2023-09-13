@@ -9,6 +9,8 @@
         {# object in the database. #}
         <form action="{% url 'GenomelEditor:save_annotation' %}" method="post">
 
+            {% csrf_token %}
+
             <label for="volpiano_transcription_volpiano_input">Volpiano</label>
             <input id="volpiano_transcription_volpiano_input"
                    type="text"
@@ -29,13 +31,41 @@
                    name="is_adiastematic"
                    value="{{ melody.is_adiastematic }}">
             <br>
+            <label for="volpiano_transcription_is_incomplete_in_source">Is incomplete in source?</label>
+            <input id="volpiano_transcription_is_incomplete_in_source"
+                   type="checkbox"
+                   name="is_incomplete_in_source"
+                   value="{{ melody.is_incomplete_in_source }}">
+            <br><br>
 
-            <input type="hidden" value="{{ melody.id }}" name="melody_id">
+            <!-- State management. -->
+            {% if melody.is_in_transcription %}
+                <label for="volpiano_transcription_is_transcribed">Is transcribed?</label>
+                <input id="volpiano_transcription_is_transcribed"
+                       type="checkbox"
+                       name="is_transcribed"
+                       value=true
+                       {% if melody.show_as_transcribed %} checked {% endif %}
+                >
+            {% else %}
+                <!-- TODO: see if user has permission to check?
+                     At this point, the user should always have the permission to check,
+                     because a melody that is already transcribed and requires checking
+                     should never be selected for a user who does *not* have checking permissions.-->
+                <label for="volpiano_transcription_is_checked">Can be finalized?</label>
+                <input id="volpiano_transcription_is_checked"
+                       type="checkbox"
+                       name="is_checked"
+                       value=true
+                       {% if melody.show_as_checked %} checked {% endif %}
+                >
+            {% endif %}
+
             <input type="hidden" value="{{ chant.id }}" name="chant_id">
+            <input type="hidden" value="{{ melody.id|default_if_none:"" }}" name="melody_id">
+{#          <input type="hidden" value="{{ melody.timestamp }}" name="melody_timestamp">#}
 
             <input type="submit" value="Save">
         </form>
-{#        Editable field for syllabized text.#}
-{#        Pre-populated with the chant.full_text_manuscript field.#}
     </div>
 </div>
