@@ -7,9 +7,43 @@
     {% include "chant_description.html" with chant=chant %}
 
     <br>
-    <div id="image">(Here will be the image from which you are transcribing.)
-        <img src="{% static 'test_folio_pl_21r.jpg' %}" alt="test image"/>
+    <div id="image_container">
+        <img id="image" src="{% static 'test_folio_pl_21r.jpg' %}" alt="test image"/>
     </div>
+
+    <script>
+        console.log('test')
+        const elem2 = document.getElementById('image')
+        console.log('elem2: ')
+        console.log(elem2)
+    </script>
+    <script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
+    <script>
+        const elem = document.getElementById('image')
+        console.log('elem: ')
+        console.log(elem)
+        const panzoom = Panzoom(elem, {
+            canvas: true,
+            cursor: 'move',
+            maxScale: 2,
+            minScale: 0.5,
+            bounds: true,
+            boundsPadding: 0.5,
+            zoomDoubleClickSpeed: 1,
+            zoomSpeed: 1,
+            smoothScroll: false,
+            smoothScrollSpeed: 1,
+            smoothScrollStopDelay: 300,
+            touchAction: 'none',
+            touchEnabled: true,
+            beforeWheel: function(e) {
+                // allow wheel-zoom only if altKey is down. Otherwise - ignore
+                var shouldIgnore = !e.altKey;
+                return shouldIgnore;
+            }
+        })
+    </script>
+
     <br>
     {# Have to pass both melody and chant to the transcription because of the form #}
     {# action having to send the data upstream to really create a new melody. #}
