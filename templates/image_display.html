@@ -1,0 +1,88 @@
+{% load static %}
+
+{#<button id="image_paste_from_clipboard">Paste Image</button>#}
+<button id="image_zoom_in">Zoom in</button>
+<button id="image_zoom_out">Zoom out</button>
+<button id="image_zoom_reset">Reset</button>
+
+<div id="image_container"
+     style="height: 300px;
+            width: 80%;
+            background-color: antiquewhite;
+            resize: both">
+    <img id="image"
+         src="{% static 'test_folio_pl_21r.jpg' %}"
+         alt="test image"
+         style="position: relative"/>
+</div>
+
+<script>
+    // This script pastes the image from the clipboard into the image display.
+    // See https://stackoverflow.com/questions/6333814/how-does-the-paste-image-from-clipboard-functionality-work-in-gmail-and-google-c
+    document.onpaste = function(event) {
+        const items = (event.clipboardData || event.originalEvent.clipboardData).items;
+        // console.log(JSON.stringify(items)); // might give the mime types, but doesn't
+        // So far, just testing what data is coming from the paste event.
+        for (const index in items) {
+            const item = items[index];
+            if (item.kind === 'file') {
+                var blob = item.getAsFile();
+                var reader = new FileReader();
+                reader.onload = function (event) {
+                    // event.target.result contains the base64 code for the image
+                    const image = document.getElementById('image');
+                    image.src = event.target.result;
+                    // console.log(event.target.result); // data url!
+                };
+                reader.readAsDataURL(blob);
+            }
+        }
+    }
+</script>
+
+
+<script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
+<script>
+    // This script adds pan and zoom functionality to the image display after it is loaded..
+    const elem = document.getElementById('image')
+    const panzoom = Panzoom(elem, {
+        canvas: false,
+        cursor: 'move',
+        maxScale: 4,
+        minScale: 0.25,
+        bounds: false,
+        boundsPadding: 0.05,
+        zoomDoubleClickSpeed: 1,
+        zoomSpeed: 1,
+        smoothScroll: false,
+        smoothScrollSpeed: 1,
+        smoothScrollStopDelay: 300,
+        touchAction: 'none',
+        touchEnabled: true,
+        beforeWheel: function(e) {
+            // allow wheel-zoom only if altKey is down. Otherwise - ignore
+            var shouldIgnore = !e.altKey;
+            return shouldIgnore;
+        }
+    })
+
+    const zoomInButton = document.getElementById('image_zoom_in')
+    zoomInButton.addEventListener('click', function(event) {
+        panzoom.zoomIn()
+    })
+    const zoomOutButton = document.getElementById('image_zoom_out')
+    zoomOutButton.addEventListener('click', function(event) {
+        panzoom.zoomOut()
+    })
+    const resetButton = document.getElementById('image_zoom_reset')
+    resetButton.addEventListener('click', function(event) {
+        panzoom.reset()
+    })
+
+    {#const pasteButton = document.getElementById('image_paste_from_clipboard')#}
+    {#pasteButton.addEventListener('click', function(event) {#}
+    {#    // TODO: paste image from clipboard.#}
+    {#    // See https://stackoverflow.com/questions/6333814/how-does-the-paste-image-from-clipboard-functionality-work-in-gmail-and-google-c#}
+    {# }) #}
+
+</script>
