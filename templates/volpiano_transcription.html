@@ -1,3 +1,7 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'volpiano_transcription.css' %}">
+
 <div id="volpiano_transcription">
     <div id="volpiano_transcription_result">
         {# Here be the result of the transcription. The purpose of this field #}
@@ -25,6 +29,19 @@
                    name="syllabized_text"
                    size="{{ melody.syllabized_text|length|add:"40" }}"
                    value="{{ melody.syllabized_text }}">
+            <br>
+            <button id="volpiano_transcription_do_render"
+                    type="button">
+                {# Without setting the type, a button in a form always submits. #}
+                Render
+            </button>
+            <br>
+
+            {# Here we render the current state of the transcription. #}
+            {# This requires quite a bit of javascripting (below). #}
+            <div id="volpiano_transcription_rendering_container">
+            </div>
+
             <br>
             <label for="volpiano_transcription_is_adiastematic">Is adiastematic?</label>
             <input id="volpiano_transcription_is_adiastematic"
@@ -70,3 +87,26 @@
         </form>
     </div>
 </div>
+
+<script type="text/javascript" src="{% static "scripts/volpiano_transcription_rendering.js" %}">
+    // Provides the render() function that is attached to the "Render" button on clik in the following script.
+</script>
+<script type="text/javascript" id="volpiano_transcription_rendering_script">
+    // This is for validation purposes.
+    // When the user clicks the "Render" button, we want to render the current
+    // state of the transcription into the div "volpiano_transcription_rendering_container".
+    // We do this in the front-end by collecting the currently transcribed
+    // melody and syllabized text in the form.
+    const rendering_container = document.getElementById('volpiano_transcription_rendering_container');
+
+    render_button = document.getElementById('volpiano_transcription_do_render');
+    render_button.addEventListener('click', function(event) {
+        const current_volpiano = document.getElementById('volpiano_transcription_volpiano_input').value;
+        const current_syllabized_text = document.getElementById('volpiano_transcription_syllabized_text_input').value;
+        console.log('Current volpiano: ', current_volpiano);
+        console.log('Current syllabized text: ', current_syllabized_text);
+
+        render(current_volpiano, current_syllabized_text, rendering_container);
+    })
+
+</script>

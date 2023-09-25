@@ -1,0 +1,28 @@
+@font-face {
+    font-family: "volpiano";
+    src: url("fonts/volpiano.otf");
+}
+
+.syllable_volpiano {
+    /*border: 1px solid blue;*/
+    font-family: "volpiano", sans-serif;
+    font-size: 20px;
+}
+
+.syllable_syllabized_text {
+    /*border: 1px solid purple;*/
+}
+
+.word_container {
+    /*border: 1px solid green;*/
+    display: inline-block;
+}
+
+.syllable_container {
+    display: inline-block;
+}
+
+
+#volpiano_clef_header_text {
+    color: transparent;
+}
