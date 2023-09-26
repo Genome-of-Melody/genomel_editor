@@ -1,21 +1,28 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Genome of Melody Editor</title>
+    <link rel="stylesheet" href="{% static 'base.css' %}">
 </head>
-<body>
+<body id="body">
 
     <div id="header">
         {% block header %}
-            <h1>Genome of Melody Editor</h1>
+            <h1 id="main_heading">Genome of Melody Editor</h1>
+
+            <button class="navigation_button">
+                <a class="navigation_button_link" href="{% url 'GenomelEditor:index' %}">Home</a>
+            </button>
             {% if user.is_authenticated %}
-                <p>Hi {{ user.username }}!</p>
-                <a href="{% url 'GenomelEditor:logout' %}">Logout</a>
+                <button class="navigation_button">
+                    <span><a class="navigation_button_link" href="{% url 'GenomelEditor:logout' %}">Logout</a></span>
+                </button>
+                <span>Logged in as: <b>{{ user.username }}</b></span>
             {% else %}
                 {% include "login.html" %}
             {% endif %}
-            <br><a href="{% url 'GenomelEditor:index' %}">Home</a>
         {% endblock %}
     </div>
 

@@ -7,7 +7,7 @@ const WORD_CONTAINER_DIV_CLASS = 'word_container';
 const VOLPIANO_WORD_SEPARATOR = '---';
 const VOLPIANO_SYLLABLE_SEPARATOR = '--';
 
-const TEXT_WORD_SEPARATOR = '_';
+const TEXT_WORD_SEPARATOR = '&nbsp;&nbsp;';
 const TEXT_SYLLABLE_SEPARATOR = '-';
 
 const VOLPIANO_EMPTY_SYLLABLE = '-';
@@ -223,16 +223,7 @@ function render(volpiano, syllabized_text, rendering_container) {
             if (j < n_syllables_syllabized_text) {
                 syllable_text = word_syllabized_text[j];
             }
-            console.log('Syllable text: ');
-            console.log(syllable_text);
-            if (syllable_text === undefined) {
-                console.log('Syllable text undefined!');
-                console.log('i: ' + i);
-                console.log('j: ' + j);
-                console.log('n_syllables_syllabized_text: ' + n_syllables_syllabized_text);
-                console.log('word_syllabized_text:');
-                console.log(word_syllabized_text);
-            }
+
             // Render the text syllable.
             const syllable_text_div_id = _create_syllable_text_div_id(i, j);
             const syllable_text_div = _create_syllable_text_div(
