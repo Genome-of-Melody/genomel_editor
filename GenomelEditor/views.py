@@ -245,6 +245,11 @@ def upload_sources(request):
     return index(request)
 
 
+def help(request):
+    """Documentation for users: primarily annotators."""
+    return render(request, 'help.html')
+
+
 def login_user(request):
     username = request.POST['username']
     password = request.POST['password']

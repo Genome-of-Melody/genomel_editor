@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block page %}
+    <p id="help">
+        <h1>Annotating with Genomel Editor</h1>
+        <p>
+            To start annotating with the Genomel Editor, you need to:
+
+            <ul>
+                <li>Obtain a user account.
+                    (Contact Jan Hajič at the Masaryk Institute and Archives, Czech Academy of Sciences.).
+                </li>
+                <li>Log in to the editor using the form in the upper area site (header).</li>
+                <li>Go to the Annotate page.</li>
+                <li>The system will either assign to you a new annotation, or it will
+                    load a mellody for you to continue annotating.
+                </li>
+            </ul>
+        </p>
+        <p>
+            Once you are on the annotation page, you have to 1) load the image,
+            2) syllabize the text, 3.1) transcribe the melody into Volpiano, or
+            3.2) mark the melody as impossible to transcribe (incomplete or adiastematic),
+            and 4) save your progress.
+        </p>
+        <p>
+            1) Loading the image:
+
+            <ul>
+                <li>In order to load the image from which you are transcribing,
+                    <b>you need to copy the image into the clipboard</b> first.</li>
+                <li>Go to the image URL that the system provides you with.
+                    Some chant databases serve the image directly to your browser
+                    (like ispan.pl). In that case, by right-clicking the image
+                    in the browser, a context menu comes up that contains the "Copy Image"
+                    option. Click that option.
+                </li>
+                <li>However, some online libraries, such as Gallica or the British National Library,
+                    don't allow you to copy the image directly. However, what they do provide
+                    is a download option. If you download the image, it opens in a new browser
+                    tab as a normal image file. You can then copy it from there using right-click
+                    to bring up the context menu and select "Copy Image".
+                </li>
+                <li>Once the image is copied, switch back to the annotation tab and
+                    <b>just press paste: Ctrl+V (or Cmd+V on Mac).</b> The image will paste
+                    itself into the image area.</li>
+                <li>The image is draggable, and you can use the buttons to zoom
+                    in or out if need be. You can also adjust the size of the image
+                    area -- it is resizable using the bottom right corner.</li>
+                <li>Once you can comfortably see the part of the image that you
+                    should be transcribing, you can start working on the Volpiano
+                    transcription.</li>
+            </ul>
+        </p>
+
+        <p>
+            2) Syllabizing the text:
+
+            <ul>
+                <li>Under the image, you can see the "Syllabized text" field
+                    pre-populated with the manuscript text.</li>
+                <li>However, the information we donwloaded from Cantus Index
+                    does not contain the syllabization of the text. This has
+                    to be done manually (at least if you are the first person
+                    to be annotating a chant).</li>
+                <li><b>Add hyphens ("-") to indicate syllable breaks.</b> Do not add
+                    any spacing.</li>
+            </ul>
+        </p>
+
+        <p>
+            3.1) Transcribing the melody:
+
+            <ul>
+                <li>Proceed to transcribe the melody into Volpiano according
+                    to the <a  target="_blank" href="https://cantusdatabase.org/static/documents/2.%20Volpiano%20Protocols.pdf">
+                        Cantus Volpiano Protocols</a> (clicking the link opens a new tab).</li>
+                <li>At any point, to check your progress, click the "Render" button.</li>
+            </ul>
+
+            3.2) Marking the melody as impossible to transcribe:
+
+            <ul>
+                <li>It can happen that the chant comes from an adiastematic source.
+                    In that case, do not transcribe anything and check the "Adiastematic"
+                    checkbox.</li>
+                <li>In other cases, a chant might be recorded in an incomplete form.
+                    This most often happens when the chant occurs in the same source
+                    earlier, so possibly only the incipit is written down (so that the
+                    singers recall the melody, which they would have known by heart anyway).
+                    In this case, do not transcribe anything and check the "Incomplete"
+                    checkbox.</li>
+            </ul>
+        </p>
+
+        <p>
+            4) Save your work
+
+            <ul>
+                <li>In order to save your work in progress, click the "Save" button.
+                    The server should let you continue editing. (Unfortunately,
+                    we have not yet implemented retaining the image, so after saving
+                    your work, you have to do Step 1 again. It's on our TODO
+                    list.)</li>
+                <li>Once you are done with the melody transcription and text syllabization,
+                    make sure you render your transcription and check that the text
+                    and melody fit together properly. Then, to mark the transcription
+                    as complete, check the "Is transcribed?" checkbox. Then, click "Save".
+                    The melody will be moved to the next step of the process: validation.</li>
+            </ul>
+        </p>
+
+    </p>
+
+{% endblock %}
