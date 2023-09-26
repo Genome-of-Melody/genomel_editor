@@ -1,6 +1,6 @@
 {% load static %}
 
-<link rel="stylesheet" href="{% static 'volpiano_transcription.css' %}">
+<link type="text/css" rel="stylesheet" href="{% static 'volpiano_transcription.css' %}">
 
 <div id="volpiano_transcription">
     <div id="volpiano_transcription_result">
@@ -88,10 +88,10 @@
     </div>
 </div>
 
-<script type="text/javascript" src="{% static "scripts/volpiano_transcription_rendering.js" %}">
+<script type="application/javascript" src="{% static "scripts/volpiano_transcription_rendering.js" %}">
     // Provides the render() function that is attached to the "Render" button on clik in the following script.
 </script>
-<script type="text/javascript" id="volpiano_transcription_rendering_script">
+<script type="application/javascript" id="volpiano_transcription_rendering_script">
     // This is for validation purposes.
     // When the user clicks the "Render" button, we want to render the current
     // state of the transcription into the div "volpiano_transcription_rendering_container".
