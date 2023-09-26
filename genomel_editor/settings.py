@@ -25,7 +25,9 @@ SECRET_KEY = "django-insecure-4(b(y=spk1yutvru%7#i75r0u(1ns(-@5p8zpe1%*!+$f8@d2=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'chantlab.mua.cas.cz',
+]
 
 
 # Application definition
