@@ -5,10 +5,12 @@
 
 
 #body {
+    background: antiquewhite;
 }
 
 
 #header {
+    background: ghostwhite;
     border: 1px solid mediumpurple;
     padding-left: 20px;
     padding-bottom: 10px;
@@ -21,9 +23,11 @@
 
 
 #page {
+    background: ghostwhite;
     border: 1px solid green;
     padding-left: 20px;
     padding-top: 10px;
+    padding-bottom: 10px;
     margin-top: 10px;
 }
 
@@ -31,4 +35,13 @@
 
 .login_form_input {
     display: inline-block;
+}
+
+.chant_description_label {
+    font-weight: bold;
+}
+
+.chant_description_value_cell {
+    font-weight: normal;
+    padding-left: 10px;
 }

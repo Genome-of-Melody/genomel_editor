@@ -7,10 +7,12 @@
     {% endblock %}
 
     {% if user.is_superuser %}
+        <br>
         <a href="{% url 'GenomelEditor:admin_dashboard' %}">Admin dashboard</a>
     {% endif %}
 
     {% if user.is_authenticated %}
+        <br>
         <a href="{% url 'GenomelEditor:annotate' %}">Annotate</a>
     {% endif %}
 

@@ -1,8 +1,23 @@
 <div id="chant_description">
-    <span class="chant_description_label">Chant ID:</span> {{ chant.id }} <br>
-    <span class="chant_description_label">Incipit:</span> {{ chant.incipit }}<br>
-    <span class="chant_description_label">Siglum:</span> {{ chant.siglum }}<br>
-    <span class="chant_description_label">Image URL:</span>
-        <a href="{{ chant.image_link }}" target="_blank" rel="norefferer noopener">{{ chant.image_link }}</a>
-    </p>
+    <table>
+        <tr>
+            <td class="chant_description_label_cell"><span class="chant_description_label">Chant ID</span></td>
+            <td class="chant_description_value_cell">{{ chant.id }}</td>
+        </tr>
+        <tr>
+            <td class="chant_description_label_cell"><span class="chant_description_label">Incipit</span></td>
+            <td class="chant_description_value_cell">{{ chant.incipit }}</td>
+        </tr>
+        <tr>
+            <td class="chant_description_label_cell"><span class="chant_description_label">Siglum</span></td>
+            <td class="chant_description_value_cell">{{ chant.siglum }}</td>
+        </tr>
+        <tr>
+            <td class="chant_description_label_cell"><span class="chant_description_label">Image URL</span></td>
+            <td class="chant_description_value_cell"><a href="{{ chant.image_link }}"
+                   target="_blank"
+                   rel="norefferer noopener">
+                {{ chant.image_link }}</a></td>
+        </tr>
+    </table>
 </div>

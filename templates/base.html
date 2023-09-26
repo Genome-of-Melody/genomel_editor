@@ -17,6 +17,14 @@
             </button>
             {% if user.is_authenticated %}
                 <button class="navigation_button">
+                    <span><a class="navigation_button_link" href="{% url 'GenomelEditor:annotate' %}">Annotate</a></span>
+                </button>
+                {% if user.is_superuser %}
+                <button class="navigation_button">
+                    <span><a class="navigation_button_link" href="{% url 'GenomelEditor:admin_dashboard' %}">Admin dashboard</a></span>
+                </button>
+                {% endif %}
+                <button class="navigation_button">
                     <span><a class="navigation_button_link" href="{% url 'GenomelEditor:logout' %}">Logout</a></span>
                 </button>
                 <span>Logged in as: <b>{{ user.username }}</b></span>

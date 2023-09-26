@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'chantlab.mua.cas.cz',
+    '127.0.0.1',
 ]
 
 
@@ -118,7 +119,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = "/static/"
+STATIC_URL = " /genomel_editor/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "GenomelEditor", "static/")
 
 
