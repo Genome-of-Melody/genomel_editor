@@ -19,7 +19,23 @@
 </div>
 
 <script>
-    // This script pastes the image from the clipboard into the image display.
+    // This script loads the image.
+
+    // Either it finds an image for the melody in local storage,
+    // or it pastes the image from the clipboard into the image display.
+    function createImageLocalStorageName(melody_id) {
+        return 'GenomelEditor_image_' + melody_id;
+    }
+
+    // If the image is in local storage:
+    const image_name = createImageLocalStorageName({{ melody.id }});
+    const image_as_JSON_string = localStorage.getItem(image_name);
+    if (image_as_JSON_string) {
+        const image = document.getElementById('image');
+        image.src = JSON.parse(image_as_JSON_string);
+    }
+
+    // For the user:
     // See https://stackoverflow.com/questions/6333814/how-does-the-paste-image-from-clipboard-functionality-work-in-gmail-and-google-c
     document.onpaste = function(event) {
         const items = (event.clipboardData || event.originalEvent.clipboardData).items;
@@ -30,11 +46,17 @@
             if (item.kind === 'file') {
                 var blob = item.getAsFile();
                 var reader = new FileReader();
+                // The adding the pasted image data into the image element happens
+                // in this onload event, which is triggered by reader.readAsDataURL.
                 reader.onload = function (event) {
                     // event.target.result contains the base64 code for the image
                     const image = document.getElementById('image');
                     image.src = event.target.result;
                     // console.log(event.target.result); // data url!
+
+                    // Save image to local storage.
+                    const new_image_name = createImageLocalStorageName({{ melody.id }});
+                    localStorage.setItem(new_image_name, JSON.stringify(event.target.result));
                 };
                 reader.readAsDataURL(blob);
             }

@@ -3,7 +3,7 @@
 
     {% include "chant_description.html" with chant=chant %}
     <br>
-    {% include "image_display.html" with chant=chant %}
+    {% include "image_display.html" with melody=melody chant=chant %}
     <br>
     {# Have to pass both melody and chant to the transcription because of the form #}
     {# action having to send the data upstream to really create a new melody. #}
