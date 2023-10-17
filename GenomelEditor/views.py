@@ -4,6 +4,7 @@ import time
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.models import User
 from django.db.models import Q
 from django.forms import forms
 from django.shortcuts import render
@@ -27,6 +28,19 @@ def index(request):
                'n_chants': n_chants,
                'n_sources': n_sources,
                'percent_done': percent_done}
+
+    # Statistics for the annotator dahsboard
+    annotator_names = User.objects.filter(groups__name='annotators').values_list('username', flat=True)
+    annotator_stats = {name: 0 for name in annotator_names}
+    melodies = Melody.objects.all()
+    for melody in melodies:
+        if melody.user_transcriber is not None:
+            # Some melodies may have been transcribed by non-annotators.
+            if melody.user_transcriber.username in annotator_stats:
+                annotator_stats[melody.user_transcriber.username] += 1
+    sorted_annotator_stats = sorted(annotator_stats.items(), key=lambda x: x[1], reverse=True)
+    context['sorted_annotator_stats'] = sorted_annotator_stats
+
     return render(request, 'index.html', context)
 
 

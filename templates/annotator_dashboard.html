@@ -1,0 +1,10 @@
+<div id="annotator_dashboard">
+    <span class="annotator_dashboard_heading"><h2>Annotator dashboard</h2></span>
+    {% for name, melody_count in sorted_annotator_stats %}
+        <div class="annotator_stat" id="annotator_stat_{{ name }}">
+            <span class="annotator_stat_name">{{ name }}:</span>
+            <span class="annotator_stat_value">{{ melody_count }}</span>
+        </div>
+    {% endfor %}
+
+</div>

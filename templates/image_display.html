@@ -23,17 +23,29 @@
 
     // Either it finds an image for the melody in local storage,
     // or it pastes the image from the clipboard into the image display.
-    function createImageLocalStorageName(melody_id) {
-        return 'GenomelEditor_image_' + melody_id;
+
+    // In local storage, we refer to the images not by melody ID, but by their
+    // chant ID.
+    // Each chant only has one melody, and each melody -- even before it is added
+    // to the DB -- has a chant. So, we can use the chant ID as the key for the
+    // image that we add to local storage for transcribing this melody, possibly before
+    // it is added to the database.
+    function createImageLocalStorageName(chant_id) {
+        return 'GenomelEditor_image_ch-' + chant_id;
     }
 
-    // If the image is in local storage:
-    const image_name = createImageLocalStorageName({{ melody.id }});
-    const image_as_JSON_string = localStorage.getItem(image_name);
-    if (image_as_JSON_string) {
-        const image = document.getElementById('image');
-        image.src = JSON.parse(image_as_JSON_string);
-    }
+    // If the melody does not have an ID yet, it means it has never
+    // been annotated before, which means no one could have yet found
+    // an image for it. So, only try to load an image if the melody has an ID.
+    {% if melody.id %}
+        // If the image is in local storage:
+        const image_name = createImageLocalStorageName({{ melody.chant.id }});
+        const image_as_JSON_string = localStorage.getItem(image_name);
+        if (image_as_JSON_string) {
+            const image = document.getElementById('image');
+            image.src = JSON.parse(image_as_JSON_string);
+        }
+    {% endif %}
 
     // For the user:
     // See https://stackoverflow.com/questions/6333814/how-does-the-paste-image-from-clipboard-functionality-work-in-gmail-and-google-c
@@ -55,7 +67,7 @@
                     // console.log(event.target.result); // data url!
 
                     // Save image to local storage.
-                    const new_image_name = createImageLocalStorageName({{ melody.id }});
+                    const new_image_name = createImageLocalStorageName({{ melody.chant.id }});
                     localStorage.setItem(new_image_name, JSON.stringify(event.target.result));
                 };
                 reader.readAsDataURL(blob);

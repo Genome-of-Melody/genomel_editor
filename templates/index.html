@@ -1,11 +1,6 @@
 {% extends "base.html" %}
 {% block page %}
 
-    {% block dashboard %}
-        We have {{ n_chants }} chants and {{ n_melodies }} melodies in {{ n_sources }} sources.
-        <br> Our annotations are {{ percent_done }}% complete.
-    {% endblock %}
-
     {% if user.is_superuser %}
         <br>
         <a href="{% url 'GenomelEditor:admin_dashboard' %}">Admin dashboard</a>
@@ -15,5 +10,9 @@
         <br>
         <a href="{% url 'GenomelEditor:annotate' %}">Annotate</a>
     {% endif %}
+
+    {% include "annotator_dashboard.html" with sorted_annotator_stats=sorted_annotator_stats %}
+
+
 
 {% endblock %}
