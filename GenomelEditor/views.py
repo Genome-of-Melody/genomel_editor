@@ -1,15 +1,18 @@
 import datetime
 import logging
+import random
 import time
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
+from django.db import DatabaseError
 from django.db.models import Q
 from django.forms import forms
 from django.shortcuts import render
 from django.views.decorators.http import require_POST
 
+from GenomelEditor.annotation_logic import assign_melody_and_chant_to_annotator, create_new_melody_from_chant
 from GenomelEditor.forms import UploadChantsForm, UploadSourcesForm, SaveAnnotationForm
 from GenomelEditor.models import Chant, Melody, Source
 from GenomelEditor.utils import get_full_text_for_cantus_id
@@ -49,70 +52,30 @@ def annotate(request):
     context = {'chant': None,
                'melody': None}
 
+    chant, melody = None, None
+
+    print('views.annotate(): request.user: {}'.format(request.user))
+
     # Assign the next chant to be annotated to the user.
-    # First, check if the user has a melody in transcription.
-    # If so, retrieve its chant and use the "in progress" context.
-    melody_in_transcription = Melody.objects.filter(user_transcriber=request.user).\
-        filter(is_in_transcription=True).\
-        order_by('timestamp').first()
-    if melody_in_transcription is not None:
-        print('...found melody of user {} in transcription: {}'.format(request.user, melody_in_transcription))
-        context['melody'] = melody_in_transcription
-        context['chant'] = Chant.objects.get(id=melody_in_transcription.chant.id)
-        print('...found chant: {}'.format(context['chant']))
-        return render(request, 'annotate.html', context)
-
-    # Now we know that the user has no melody in progress. We assign the next chant.
-    # We need a chant that has no associated volpiano and which has no associated
-    # melody created yet.
-    chant = Chant.objects.filter(Q(melody=None)).filter(Q(volpiano='')).first()
-
-    print('Found chant: {}'.format(chant))
-    if chant.volpiano is None:
-        print('...volpiano is None')
-    elif chant.volpiano == '':
-        print('...volpiano is empty string')
-    else:
-        print('...volpiano is something else: {}'.format(chant.volpiano))
-    context['chant'] = chant
-
-    # Create a new Melody object for the user to annotate.
-
-    # We try to make sure the melody has some text to syllabize.
-    # If the full text is not available from the chant, we try to scrape it
-    # from the Cantus Index based on cantus_id.
-    # If that fails, we fall back to the incipit.
-    melody_text = chant.full_text
-    if len(chant.full_text_manuscript) > 0:
-        melody_text = chant.full_text_manuscript
-    if len(melody_text) == 0:
-        print('Cannot get full text from chant record, trying scrape from Cantus Index.')
+    # This involves a database transaction, which may fail due to concurrency issues,
+    # hence the retries.
+    n_retries = 0
+    max_retries = 5
+    while n_retries < max_retries:
         try:
-            melody_text = get_full_text_for_cantus_id(chant.cantus_id)
-        except Exception as e:
-            print('Error getting full text for cantus_id {}: {}'.format(chant.cantus_id, e))
-            melody_text = chant.incipit
+            chant, melody = assign_melody_and_chant_to_annotator(request.user)
+            break
+        except DatabaseError:
+            n_retries += 1
+            time.sleep(0.1)
+            continue
 
-    # It's not great to add the Melody object to the database at this point.
-    # We should only do this when the user saves the annotation.
-    # Here, we only create the Melody object as a container for data that should
-    # be shown during annotation. (When a user resumes annotation of an existing
-    # melody, then the Melody object is retrieved from the database.)
-    melody = Melody(chant=chant,
-                    user_transcriber=request.user,
-                    user_checker=None,
-                    volpiano=chant.volpiano,
-                    syllabized_text=melody_text)
-    melody.move_to_transcription()  # The melody was created to be annotated.
-    # print('\n\n\nMelody created.')
-    # print('Melody type: {}'.format(type(melody)))
+    # Here we should create the Melody in the DB already, because
+    # otherwise we have no way to prevent assigning the same chant
+    # to different users.
 
+    context['chant'] = chant
     context['melody'] = melody
-
-    ### DEBUG
-    # print('...melody syllabized_text on the server side: {}'.format(type(context['melody'])))
-    print('...created melody (but not added to DB): {}'.format(context['melody']))
-    print('...number of melodies in database: {}'.format(Melody.objects.count()))
     return render(request, 'annotate.html', context)
 
 
