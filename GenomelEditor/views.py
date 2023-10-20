@@ -114,7 +114,14 @@ def save_annotation(request):
             raise ValueError('Melody must be only transcribed by one user!'
                              ' Previous transcriber: {},'
                              ' current user: {}'.format(melody.user_transcriber, request.user))
-
+        if 'volpiano' not in annotation_data:
+            # Saving with an empty melody. Should not happen unless the annotator
+            # deleted the melody, including the default initial '1---'.
+            # In this case, we impute an empty string to the form data,
+            # so that the saving process is not interrupted, but we also
+            # log a warning.
+            logging.warning('Melody ID {}: Saving with an empty melody!'.format(melody.id))
+            annotation_data['volpiano'] = ''
         melody.volpiano = annotation_data['volpiano']
         melody.syllabized_text = annotation_data['syllabized_text']
 
