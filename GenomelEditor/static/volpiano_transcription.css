@@ -3,15 +3,62 @@
     src: url("fonts/volpiano.otf");
 }
 
+/* Style for the input form */
+
+#volpiano_transcription_input_table {
+    vertical-align: top;
+    border-collapse: collapse;
+    /*border: 1px solid red;*/
+}
+
+#volpiano_transcription_input_table td {
+    padding: 4pt;
+    vertical-align: top;
+    /*border: 1px solid green;*/
+}
+
+#volpiano_transcription_volpiano_input_label, #volpiano_transcription_syllabized_text_input_label {
+    font-size: 12pt;
+    font-weight: bold;
+    /*padding-left: 8pt;*/
+    padding-right: 8pt;
+    /*border: 1px solid blue;*/
+}
+
+
+#volpiano_transcription_volpiano_input, #volpiano_transcription_syllabized_text_input {
+    font-size: 12pt;
+}
+
+
+#volpiano_transcription_do_render {
+    /*margin-top: 8pt;*/
+    padding: 4pt;
+    font-size: 12pt;
+    font-weight: bold;
+}
+
+#volpiano_transcription_form_submit {
+    margin-top: 8pt;
+    padding: 4pt;
+    font-size: 12pt;
+    font-weight: bold;
+}
+
+
+
+
+/* Style for rendering */
 
 .syllable_volpiano {
     /*border: 1px solid blue;*/
     font-family: "volpiano", sans-serif;
-    font-size: 20px;
+    font-size: 30pt;
 }
 
 .syllable_syllabized_text {
     /*border: 1px solid purple;*/
+    font-size: 14pt;
 }
 
 .word_container {

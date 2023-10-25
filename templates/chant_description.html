@@ -6,7 +6,10 @@
         </tr>
         <tr>
             <td class="chant_description_label_cell"><span class="chant_description_label">Cantus ID</span></td>
-            <td class="chant_description_value_cell">{{ chant.cantus_id }}</td>
+            <td class="chant_description_value_cell"><a href="https://cantusindex.org/id/{{ chant.cantus_id }}"
+                target="_blank"
+                rel="noreferrer noopener">{{ chant.cantus_id }}</a>
+            </td>
         <tr>
             <td class="chant_description_label_cell"><span class="chant_description_label">Incipit</span></td>
             <td class="chant_description_value_cell">{{ chant.incipit }}</td>

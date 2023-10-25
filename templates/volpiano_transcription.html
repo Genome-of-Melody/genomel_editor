@@ -12,35 +12,54 @@
 {#        Here be the input field where the user edits the volpiano string.#}
         {# The important part is the form, which triggers updates to the Melody #}
         {# object in the database. #}
-        <form action="{% url 'GenomelEditor:save_annotation' %}" method="post">
+        <form action="{% url 'GenomelEditor:save_annotation' %}"
+              id="volpiano_transcription_form"
+              method="post">
 
             {% csrf_token %}
-
-            <label for="volpiano_transcription_volpiano_input">Volpiano</label>
-            <input id="volpiano_transcription_volpiano_input"
-                   type="text"
-                   name="volpiano"
-                   size="{{ melody.volpiano|length|add:"120" }}"
-                   value="{{ melody.volpiano }}">
-            <br>
-            <label for="volpiano_transcription_syllabized_text_input">Syllabized text</label>
-            <input id="volpiano_transcription_syllabized_text_input"
-                   type="text"
-                   name="syllabized_text"
-                   size="{{ melody.syllabized_text|length|add:"40" }}"
-                   value="{{ melody.syllabized_text }}">
-            <br>
-            <button id="volpiano_transcription_do_render"
-                    type="button">
-                {# Without setting the type, a button in a form always submits. #}
-                Render
-            </button>
-            <br>
-
-            {# Here we render the current state of the transcription. #}
-            {# This requires quite a bit of javascripting (below). #}
-            <div id="volpiano_transcription_rendering_container">
-            </div>
+            <table id="volpiano_transcription_input_table">
+                <tr>
+                    <td>
+                    <label id="volpiano_transcription_volpiano_input_label"
+                           for="volpiano_transcription_volpiano_input">Volpiano</label>
+                    </td>
+                    <td>
+                    <textarea id="volpiano_transcription_volpiano_input"
+                              form="volpiano_transcription_form"
+                              name="volpiano"
+                              rows="1"
+                              cols="{{ melody.volpiano|length|add:"120" }}"
+                    >{{ melody.volpiano }}</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                    <label id="volpiano_transcription_syllabized_text_input_label"
+                           for="volpiano_transcription_syllabized_text_input">Syllabized text</label>
+                    </td><td>
+                    <textarea id="volpiano_transcription_syllabized_text_input"
+                              form="volpiano_transcription_form"
+                              name="syllabized_text"
+                              rows="1"
+                              cols="{{ melody.syllabized_text|length|add:"40" }}"
+                    >{{ melody.syllabized_text }}</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                    <button id="volpiano_transcription_do_render"
+                            type="button">
+                        {# Without setting the type, a button in a form always submits. #}
+                        Render
+                    </button>
+                    </td><td>
+                    {# Here we render the current state of the transcription. #}
+                    {# This requires quite a bit of javascripting (below). #}
+                    <div id="volpiano_transcription_rendering_container">
+                    </div>
+                    </td>
+                </tr>
+            </table>
 
             <br>
             <label for="volpiano_transcription_is_adiastematic">Is adiastematic?</label>
@@ -58,7 +77,7 @@
 
             <!-- State management. -->
             {% if melody.is_in_transcription %}
-                <label for="volpiano_transcription_is_transcribed">Is transcribed?</label>
+                <label for="volpiano_transcription_is_transcribed"><b>Is transcribed?<b></label>
                 <input id="volpiano_transcription_is_transcribed"
                        type="checkbox"
                        name="is_transcribed"
@@ -70,7 +89,7 @@
                      At this point, the user should always have the permission to check,
                      because a melody that is already transcribed and requires checking
                      should never be selected for a user who does *not* have checking permissions.-->
-                <label for="volpiano_transcription_is_checked">Can be finalized?</label>
+                <label for="volpiano_transcription_is_checked"><b>Can be finalized?</b></label>
                 <input id="volpiano_transcription_is_checked"
                        type="checkbox"
                        name="is_checked"
@@ -78,12 +97,12 @@
                        {% if melody.show_as_checked %} checked {% endif %}
                 >
             {% endif %}
-
+            <br>
             <input type="hidden" value="{{ chant.id }}" name="chant_id">
             <input type="hidden" value="{{ melody.id|default_if_none:"" }}" name="melody_id">
 {#          <input type="hidden" value="{{ melody.timestamp }}" name="melody_timestamp">#}
 
-            <input type="submit" value="Save">
+            <input id="volpiano_transcription_form_submit" type="submit" value="Save">
         </form>
     </div>
 </div>
