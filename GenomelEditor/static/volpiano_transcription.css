@@ -31,6 +31,11 @@
 }
 
 
+#volpiano_transcripition_volpiano_input_switch_font {
+    margin-top: 4pt;
+}
+
+
 #volpiano_transcription_do_render {
     /*margin-top: 8pt;*/
     padding: 4pt;

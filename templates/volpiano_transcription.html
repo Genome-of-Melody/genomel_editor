@@ -22,6 +22,12 @@
                     <td>
                     <label id="volpiano_transcription_volpiano_input_label"
                            for="volpiano_transcription_volpiano_input">Volpiano</label>
+                        <br>
+                        <button id="volpiano_transcripition_volpiano_input_switch_font"
+                                type="button">
+                                {# Without setting the type, a button in a form always submits. #}
+                            Show notes</button>
+
                     </td>
                     <td>
                     <textarea id="volpiano_transcription_volpiano_input"
@@ -127,5 +133,20 @@
 
         render(current_volpiano, current_syllabized_text, rendering_container);
     })
-
+</script>
+<script>
+    // Swapping between showing the volpiano transcription as notes, in Volpiano font, and
+    // as plain text.
+    const show_notes_button = document.getElementById('volpiano_transcripition_volpiano_input_switch_font');
+    const volpiano_input = document.getElementById('volpiano_transcription_volpiano_input');
+    show_notes_button.addEventListener('click', function(event) {
+        // Also change the button text between "Show notes" and "Show text".
+        if (volpiano_input.style.fontFamily === 'Volpiano') {
+            volpiano_input.style.fontFamily = 'monospace';
+            show_notes_button.innerHTML = 'Show notes';
+        } else {
+            volpiano_input.style.fontFamily = 'Volpiano';
+            show_notes_button.innerHTML = 'Show text';
+        }
+    })
 </script>
