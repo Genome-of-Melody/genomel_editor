@@ -142,11 +142,15 @@
     show_notes_button.addEventListener('click', function(event) {
         // Also change the button text between "Show notes" and "Show text".
         if (volpiano_input.style.fontFamily === 'Volpiano') {
-            volpiano_input.style.fontFamily = 'monospace';
             show_notes_button.innerHTML = 'Show notes';
+            volpiano_input.style.fontFamily = 'monospace';
+            // Change font size to 12px.
+            volpiano_input.style.fontSize = '12pt';
         } else {
-            volpiano_input.style.fontFamily = 'Volpiano';
             show_notes_button.innerHTML = 'Show text';
+            volpiano_input.style.fontFamily = 'Volpiano';
+            // The notes are too small to read at 12pt, so we increase the font size to 16pt.
+            volpiano_input.style.fontSize = '24pt';
         }
     })
 </script>
