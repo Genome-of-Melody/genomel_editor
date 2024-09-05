@@ -7,6 +7,7 @@ def get_defaul_volpiano_string():
     so that the Volpiano field of a melody is never empty."""
     return '1---'
 
+
 def get_soup(url):
     r = requests.get(url)
     soup = bs4.BeautifulSoup(r.text, 'html.parser')
