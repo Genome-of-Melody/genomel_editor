@@ -23,12 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-4(b(y=spk1yutvru%7#i75r0u(1ns(-@5p8zpe1%*!+$f8@d2="
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False if os.getenv("DEBUG_MODE", "True") == "False" else True
 
-ALLOWED_HOSTS = [
-    'chantlab.mua.cas.cz',
-    '127.0.0.1',
-]
+ALLOWED_HOSTS = [os.getenv("ALLOWED_HOST", "localhost")]
+
 
 
 # Application definition
@@ -41,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'GenomelEditor.apps.GenomeleditorConfig',
+    'gunicorn'
 ]
 
 MIDDLEWARE = [
@@ -121,6 +120,9 @@ USE_TZ = True
 
 STATIC_URL = "/genomel_editor/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "GenomelEditor", "static/")
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'scripts', 'static')
+]
 
 
 # Default primary key field type
